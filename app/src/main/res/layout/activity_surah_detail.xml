@@ -1,0 +1,114 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.split.reader.viewmodels.SurahDetailViewModel" />
+        <variable
+            name="position"
+            type="int" />
+        <variable
+            name="activity"
+            type="com.split.reader.ui.SurahDetailActivity" />
+
+
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <android.support.design.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <android.support.design.widget.AppBarLayout
+                    android:id="@+id/appBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+
+                    <android.support.v7.widget.Toolbar
+                        android:id="@+id/toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorPrimary"
+                        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+
+                        >
+
+                        <Button
+                            android:id="@+id/spinner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/Base.Widget.AppCompat.Button.Borderless"
+                            android:text="@{viewModel.actionBarTitle}"
+                            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+                            android:onClick="@{()->activity.onToolbarClick()}"
+                            android:drawableRight="@drawable/ic_drop_down"
+                            />
+
+                    </android.support.v7.widget.Toolbar>
+
+                </android.support.design.widget.AppBarLayout>
+            </LinearLayout>
+        </android.support.design.widget.CoordinatorLayout>
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="com.split.reader.ui.SurahDetailActivity"
+            android:orientation="vertical"
+            android:weightSum="1">
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:setSurahViewPagerAdapter="@{activity}"
+                android:layout_weight="0.92"
+                app:surahPosition="@{position}"
+                />
+
+            <LinearLayout
+                android:id="@+id/linearLayoutCompat"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@android:color/black"
+                android:padding="8dp"
+                android:layout_weight="0.08"
+                android:elevation="8dp"
+                >
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:clickable="true"
+                    android:onClick="@{()->activity.onPreviousClick()}"
+                    android:visibility="@{viewModel.previousButtonVisibility}"
+                    android:src="@drawable/ic_left" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:clickable="true"
+                    android:visibility="@{viewModel.nextButtonVisibility}"
+                    android:onClick="@{()->activity.onNextClick()}"
+                    android:src="@drawable/ic_right" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</layout>
