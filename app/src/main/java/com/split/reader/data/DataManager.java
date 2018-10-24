@@ -19,6 +19,7 @@ public class DataManager {
     private TranslationDatabase translationDatabase;
     private PreferencesHelper preferencesHelper;
 
+
     @Inject
     public DataManager(AppDatabase appDatabase, PreferencesHelper preferencesHelper,TranslationDatabase translationDatabase) {
         this.appDatabase = appDatabase;
@@ -36,6 +37,7 @@ public class DataManager {
     public LiveData<List<SurahDetail>> getSuraDetail(int suraNo){
         return appDatabase.SurahDetailDao().getSurahDetail(suraNo);
     }
+
 
     public void setLastReadLocation(String location){
         preferencesHelper.setLastRead(location);
