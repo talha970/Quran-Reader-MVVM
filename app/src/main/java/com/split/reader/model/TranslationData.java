@@ -22,7 +22,7 @@ public class TranslationData {
     @PrimaryKey
     private int id;
 
-     String displayName;
+    String displayName;
      String translator;
      String languageCode;
      String fileUrl;
@@ -65,5 +65,41 @@ public class TranslationData {
 
     public String getCurrentVersion() {
         return currentVersion;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public void setTranslator(String translator) {
+        this.translator = translator;
+    }
+
+    public void setLanguageCode(String languageCode) {
+        this.languageCode = languageCode;
+    }
+
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
+    }
+
+    public void setSaveTo(String saveTo) {
+        this.saveTo = saveTo;
+    }
+
+    public void setDownloadType(String downloadType) {
+        this.downloadType = downloadType;
+    }
+
+    public void setMinimumVersion(String minimumVersion) {
+        this.minimumVersion = minimumVersion;
+    }
+
+    public void setCurrentVersion(String currentVersion) {
+        this.currentVersion = currentVersion;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

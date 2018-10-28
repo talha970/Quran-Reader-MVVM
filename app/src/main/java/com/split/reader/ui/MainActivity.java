@@ -1,6 +1,5 @@
 package com.split.reader.ui;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -9,23 +8,22 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
 import com.split.reader.MainApplication;
 import com.split.reader.adapters.SurahsRecycleViewAdapter;
+import com.split.reader.data.TranslationDatabaseListener;
 import com.split.reader.model.Surahs;
+import com.split.reader.model.TranslationData;
 import com.split.reader.model.Verses;
 import com.split.reader.reader.R;
 import com.split.reader.reader.databinding.MainActivityBinding;
 import com.split.reader.viewmodels.SurahViewModel;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements SurahsRecycleViewAdapter.OnSurahClickListener {
+public class MainActivity extends AppCompatActivity implements SurahsRecycleViewAdapter.OnSurahClickListener,TranslationDatabaseListener {
     public static final String SURAH = "SURAH";
     public static final String SURAHS_LIST = "SURAHS_LIST";
     public static final String LAST_READ = "last_read";
@@ -34,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements SurahsRecycleView
     private SurahsRecycleViewAdapter adapter;
     private MainActivityBinding binding;
     private int lastReadVerse = -1;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +42,13 @@ public class MainActivity extends AppCompatActivity implements SurahsRecycleView
         adapter = new SurahsRecycleViewAdapter();
         binding.setLifecycleOwner(this);
         binding.rvGroup.setAdapter(adapter);
+
+        surahViewModel.fetchTranslationSync().observe(this, new Observer<List<TranslationData>>() {
+            @Override
+            public void onChanged(@Nullable List<TranslationData> translationData) {
+                Log.d("yellow",translationData.get(1).getDisplayName());
+            }
+        });
 
 
     }
@@ -57,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements SurahsRecycleView
     @Override
     protected void onResume() {
         super.onResume();
+        //surahViewModel.fetchTranslationRepo(this);
         surahViewModel.getSurahLiveData().observe(this, new Observer<List<Surahs>>() {
             @Override
             public void onChanged(@Nullable List<Surahs> surahs) {
@@ -83,12 +90,12 @@ public class MainActivity extends AppCompatActivity implements SurahsRecycleView
 
             }
         });
-        surahViewModel.getVersesLiveData().observe(this, new Observer<List<Verses>>() {
+      /*  surahViewModel.getVersesLiveData().observe(this, new Observer<List<Verses>>() {
             @Override
             public void onChanged(@Nullable List<Verses> verses) {
                 verses.size();
             }
-        });
+        });*/
     }
 
     @Override
@@ -101,6 +108,18 @@ public class MainActivity extends AppCompatActivity implements SurahsRecycleView
         ArrayList<Surahs> surahs = new ArrayList<>(surahViewModel.getSurahLiveData().getValue());
         bundle.putParcelableArrayList(SURAHS_LIST,surahs);
         detailActivityIntent.putExtras(bundle);
-        startActivity(detailActivityIntent);
+    startActivity(detailActivityIntent);
+}
+
+
+
+    @Override
+    public void onFinished(List<TranslationData> responseObject) {
+        Log.d("yellow",responseObject.get(0).getDisplayName());
+    }
+
+    @Override
+    public void onFailed(Throwable t) {
+        Log.d("yellow","error "+t);
     }
 }

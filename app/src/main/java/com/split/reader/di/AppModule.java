@@ -3,9 +3,11 @@ package com.split.reader.di;
 
 import android.content.Context;
 
+
 import com.huma.room_for_asset.RoomAsset;
 import com.split.reader.db.AppDatabase;
 import com.split.reader.db.TranslationDatabase;
+import com.split.reader.db.dao.TranslationDataDao;
 import com.split.reader.prefs.AppPreferencesHelper;
 import com.split.reader.prefs.PreferencesHelper;
 
@@ -43,7 +45,11 @@ public class AppModule {
     }
 
 
-
+    @Provides
+    @Singleton
+    TranslationDataDao provideTranslationDataDao(AppDatabase appDatabase) {
+        return appDatabase.TranslationDataDao();
+    }
     @Provides
     @Singleton
     PreferencesHelper providePreferencesHelper(Context context) {

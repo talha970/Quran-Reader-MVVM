@@ -1,17 +1,17 @@
 package com.split.reader.viewmodels;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.support.v4.util.Pair;
 import android.util.Log;
 
 import com.split.reader.MainApplication;
 import com.split.reader.data.DataManager;
+import com.split.reader.data.TranslationDatabaseListener;
 import com.split.reader.model.Surahs;
+import com.split.reader.model.TranslationData;
 import com.split.reader.model.Verses;
 
-import java.text.ParseException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -21,13 +21,14 @@ public class SurahViewModel extends ViewModel {
     private static final String TAG = SurahViewModel.class.getCanonicalName();
     @Inject
     DataManager dataManager;
+
     private LiveData<List<Surahs>> surahLiveData;
     private LiveData<List<Verses>> versesLiveData;
 
     public SurahViewModel() {
         MainApplication.getAppComponent().inject(this);
         surahLiveData = dataManager.getAllSurahs();
-        versesLiveData = dataManager.getAllVerses();
+
     }
 
     public LiveData<List<Verses>> getVersesLiveData() {
@@ -55,5 +56,11 @@ public class SurahViewModel extends ViewModel {
 
         }
         return null;
+    }
+    public void fetchTranslationRepo(TranslationDatabaseListener databaseListener){
+       dataManager.fetchTranslationRepo(databaseListener);
+    }
+    public LiveData<List<TranslationData>> fetchTranslationSync( ){
+        return dataManager.fetchTranslationSync();
     }
 }

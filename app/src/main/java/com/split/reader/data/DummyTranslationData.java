@@ -4,24 +4,28 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 import com.split.reader.model.TranslationData;
+import com.split.reader.model.TranslationResponse;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class DummyTranslationData {
 
     private Context context;
 
+    @Inject
     public DummyTranslationData(Context context) {
         this.context = context;
     }
 
     public List<TranslationData> fetchTranslationDummyData() {
         Gson gson = new Gson();
-        return gson.fromJson(readDataFromFile(), TranslationData.class);
+        TranslationResponse response = gson.fromJson(readDataFromFile(), TranslationResponse.class);
+        return response.getTranslationData();
     }
-
 
     private String readDataFromFile() {
         String json;
