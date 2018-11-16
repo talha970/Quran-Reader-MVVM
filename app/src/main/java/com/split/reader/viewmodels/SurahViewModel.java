@@ -7,10 +7,8 @@ import android.util.Log;
 
 import com.split.reader.MainApplication;
 import com.split.reader.data.DataManager;
-import com.split.reader.data.TranslationDatabaseListener;
 import com.split.reader.model.Surahs;
-import com.split.reader.model.TranslationData;
-import com.split.reader.model.Verses;
+
 
 import java.util.List;
 
@@ -23,7 +21,6 @@ public class SurahViewModel extends ViewModel {
     DataManager dataManager;
 
     private LiveData<List<Surahs>> surahLiveData;
-    private LiveData<List<Verses>> versesLiveData;
 
     public SurahViewModel() {
         MainApplication.getAppComponent().inject(this);
@@ -31,9 +28,6 @@ public class SurahViewModel extends ViewModel {
 
     }
 
-    public LiveData<List<Verses>> getVersesLiveData() {
-        return versesLiveData;
-    }
 
     public LiveData<List<Surahs>> getSurahLiveData() {
         return surahLiveData;
@@ -57,10 +51,5 @@ public class SurahViewModel extends ViewModel {
         }
         return null;
     }
-    public void fetchTranslationRepo(TranslationDatabaseListener databaseListener){
-       dataManager.fetchTranslationRepo(databaseListener);
-    }
-    public LiveData<List<TranslationData>> fetchTranslationSync( ){
-        return dataManager.fetchTranslationSync();
-    }
+
 }

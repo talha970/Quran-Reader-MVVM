@@ -25,11 +25,20 @@ public class TranslationData {
     String displayName;
      String translator;
      String languageCode;
+     String fileName;
      String fileUrl;
      String saveTo;
      String downloadType;
      String minimumVersion;
      String currentVersion;
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
     public int getId() {
         return id;

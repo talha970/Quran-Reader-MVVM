@@ -25,7 +25,10 @@ import javax.inject.Inject;
 public class AppPreferencesHelper implements PreferencesHelper {
 
     private static final String PREF_KEY_LAST_READ = "quran_last_read";
-
+    private static final String PREF_FIRST_RUN = "quran_first_run";
+    private static final String PREF_TRANS_SET = "quran_trans_set";
+    private static final String PREF_TRANS_NAME = "quran_trans_name";
+    private static final String PREF_TRANS_VERSION = "quran_trans_version";
 
 
     private final SharedPreferences mPrefs;
@@ -44,6 +47,46 @@ public class AppPreferencesHelper implements PreferencesHelper {
     @Override
     public void setLastRead(String location) {
         mPrefs.edit().putString(PREF_KEY_LAST_READ, location).apply();
+    }
+
+    @Override
+    public String getTranslationName() {
+        return  mPrefs.getString(PREF_TRANS_NAME, "");
+    }
+
+    @Override
+    public void setTranslationName(String translationName) {
+        mPrefs.edit().putString(PREF_TRANS_NAME, translationName).apply();
+    }
+
+    @Override
+    public Integer getTranslationVersion() {
+        return  mPrefs.getInt(PREF_TRANS_VERSION, -1);
+    }
+
+    @Override
+    public void setTranslationVersion(Integer version) {
+        mPrefs.edit().putInt(PREF_TRANS_VERSION, version).apply();
+    }
+
+    @Override
+    public Boolean isTranslationSet() {
+        return mPrefs.getBoolean(PREF_TRANS_SET, false);
+    }
+
+    @Override
+    public void setTranslationSet(Boolean translationSet) {
+        mPrefs.edit().putBoolean(PREF_TRANS_SET, translationSet).apply();
+    }
+
+    @Override
+    public Boolean getFirstRun() {
+        return mPrefs.getBoolean(PREF_FIRST_RUN, false);
+    }
+
+    @Override
+    public void setFirstRun(Boolean firstRun) {
+        mPrefs.edit().putBoolean(PREF_FIRST_RUN, firstRun).apply();
     }
 
 

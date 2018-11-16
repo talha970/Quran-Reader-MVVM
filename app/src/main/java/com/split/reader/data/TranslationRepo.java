@@ -20,7 +20,7 @@ public class TranslationRepo {
         this.translationDataDao = translationDataDao;
     }
 
-    public LiveData<List<TranslationData>> fetchTranslationDataSynchronous(){
+    public List<TranslationData> fetchTranslationDataSynchronous(){
         return translationDataDao.getTranslationData();
 
     }

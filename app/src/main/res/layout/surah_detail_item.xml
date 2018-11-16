@@ -52,6 +52,19 @@
                     android:fontFamily="sans-serif-light"
                     android:layout_below="@id/surah_text"
                     android:text="@{surahDetail.getTranslation()}"
+                    android:textColor="@android:color/holo_green_dark"
+                    android:textSize="20sp"
+
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/surah_trans"
+                    android:layout_alignParentLeft="true"
+                    android:fontFamily="sans-serif-light"
+                    android:layout_below="@id/surah_translation"
+                    android:text="@{surahDetail.getTrans()}"
+                    android:textStyle="italic"
                     android:textSize="20sp"
 
                     />

@@ -1,15 +1,17 @@
 package com.split.reader.viewmodels;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
+import android.support.annotation.Nullable;
 import android.view.View;
 import com.split.reader.MainApplication;
 import com.split.reader.data.DataManager;
 import com.split.reader.model.SurahDetail;
 import com.split.reader.model.Surahs;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,8 +43,21 @@ public class SurahDetailViewModel extends ViewModel {
 
     }
 
-    public LiveData<List<SurahDetail>> getSurahDetailLiveData(int pos) {
-        return dataManager.getSuraDetail(pos);
+    public LiveData<List<SurahDetail>> getSurahDetailLiveData(final int pos) {
+        final MediatorLiveData<List<SurahDetail>> mediator = new MediatorLiveData<>();
+        mediator.addSource(dataManager.getSuraDetail(pos), new Observer<List<SurahDetail>>() {
+            @Override
+            public void onChanged(@Nullable List<SurahDetail> surahDetails) {
+                List<String> transList = dataManager.getTranslationVerses(pos);
+                if(transList != null){
+                    for(int i =0; i<surahDetails.size();i++){
+                        surahDetails.get(i).setTrans(transList.get(i));
+                    }
+                }
+                mediator.setValue(surahDetails);
+            }
+        });
+        return mediator;
     }
 
     public void updateBottomBar(int position, int totalCount) {

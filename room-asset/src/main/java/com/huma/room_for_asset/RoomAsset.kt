@@ -49,7 +49,7 @@ class RoomAsset {
                     .addMigrations(object : Migration(1, 2) {
                         override fun migrate(database: SupportSQLiteDatabase) {
                             Log.w(TAG, "migrate from version 1 to 2 ")
-                            database.execSQL("CREATE TABLE IF NOT EXISTS `translations` (`id` INTEGER NOT NULL, `displayName` TEXT, `translator` TEXT, `languageCode` TEXT, `fileUrl` TEXT, `saveTo` TEXT, `downloadType` TEXT, `minimumVersion` TEXT, `currentVersion` TEXT, PRIMARY KEY(`id`))");
+                            database.execSQL("CREATE TABLE IF NOT EXISTS `translations` (`id` INTEGER NOT NULL, `displayName` TEXT, `translator` TEXT, `languageCode` TEXT, `fileUrl` TEXT, `fileName` TEXT, `saveTo` TEXT, `downloadType` TEXT, `minimumVersion` TEXT, `currentVersion` TEXT, PRIMARY KEY(`id`))");
                         }
                     })
         }

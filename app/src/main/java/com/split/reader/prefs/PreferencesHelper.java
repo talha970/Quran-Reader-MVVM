@@ -24,4 +24,20 @@ public interface PreferencesHelper {
 
     void setLastRead(String location);
 
+    String getTranslationName();
+
+    void setTranslationName(String translationName);
+
+    Integer getTranslationVersion();
+
+    void setTranslationVersion(Integer version);
+
+    Boolean isTranslationSet();
+
+    void setTranslationSet(Boolean translationSet);
+
+    Boolean getFirstRun();
+
+    void setFirstRun(Boolean firstRun);
+
 }

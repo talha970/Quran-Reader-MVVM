@@ -13,7 +13,11 @@ import java.util.List;
 @Dao
 public interface TranslationDataDao {
     @Query("select * from translations")
-    LiveData<List<TranslationData>> getTranslationData();
+    List<TranslationData> getTranslationData();
+
+    @Query("select * from translations where fileName = :name")
+    TranslationData getTranslationObject(String name);
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void saveAppData(List<TranslationData> responseObject);

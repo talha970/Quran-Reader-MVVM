@@ -1,12 +1,12 @@
 package com.split.reader.di;
 
 
+import android.app.DownloadManager;
 import android.content.Context;
 
 
 import com.huma.room_for_asset.RoomAsset;
 import com.split.reader.db.AppDatabase;
-import com.split.reader.db.TranslationDatabase;
 import com.split.reader.db.dao.TranslationDataDao;
 import com.split.reader.prefs.AppPreferencesHelper;
 import com.split.reader.prefs.PreferencesHelper;
@@ -31,19 +31,17 @@ public class AppModule {
 
     @Provides
     @Singleton
-    TranslationDatabase provideTranslationDatabase(Context context) {
-        return RoomAsset.databaseBuilder(context,
-                TranslationDatabase.class, "quran.en.yusufali.db")
-                .build();
-    }
-    @Provides
-    @Singleton
     AppDatabase provideAppDatabase(Context context) {
         return RoomAsset.databaseBuilder(context,
                 AppDatabase.class, "quran.sqlite")
+                .allowMainThreadQueries()
                 .build();
     }
 
+    @Provides
+    DownloadManager provideDownloadManager(Context context) {
+        return (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+    }
 
     @Provides
     @Singleton

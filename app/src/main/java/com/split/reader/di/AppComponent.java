@@ -1,10 +1,13 @@
 package com.split.reader.di;
 
+import com.split.reader.receivers.DownloadCompleteReceiver;
 import com.split.reader.ui.MainActivity;
 import com.split.reader.MainApplication;
 import com.split.reader.ui.SurahDetailActivity;
 import com.split.reader.viewmodels.SurahDetailViewModel;
 import com.split.reader.viewmodels.SurahViewModel;
+import com.split.reader.workmanager.DownloadTranslationWork;
+import com.split.reader.workmanager.TranslationRetrievalWork;
 
 import javax.inject.Singleton;
 
@@ -24,5 +27,11 @@ public interface AppComponent {
     void inject(SurahDetailActivity surahDetailActivity);
 
     void inject(SurahDetailViewModel surahDetailViewModel);
+
+    void inject(TranslationRetrievalWork translationRetrievalWork);
+
+    void inject(DownloadTranslationWork downloadTranslationWork);
+
+    void inject(DownloadCompleteReceiver downloadCompleteReceiver);
 
 }

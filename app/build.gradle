@@ -26,6 +26,12 @@ android {
 }
 
 dependencies {
+
+    def work_version = "1.0.0-alpha10"
+
+    implementation "android.arch.work:work-runtime:$work_version" // use -ktx for Kotlin
+
+    implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
