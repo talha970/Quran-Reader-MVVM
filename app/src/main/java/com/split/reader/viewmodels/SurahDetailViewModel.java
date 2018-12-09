@@ -1,11 +1,11 @@
 package com.split.reader.viewmodels;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MediatorLiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModel;
-import android.support.annotation.Nullable;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
+import androidx.annotation.Nullable;
 import android.view.View;
 import com.split.reader.MainApplication;
 import com.split.reader.data.DataManager;
@@ -45,7 +45,8 @@ public class SurahDetailViewModel extends ViewModel {
 
     public LiveData<List<SurahDetail>> getSurahDetailLiveData(final int pos) {
         final MediatorLiveData<List<SurahDetail>> mediator = new MediatorLiveData<>();
-        mediator.addSource(dataManager.getSuraDetail(pos), new Observer<List<SurahDetail>>() {
+        final LiveData<List<SurahDetail>> listLiveData = dataManager.getSuraDetail(pos);
+        mediator.addSource(listLiveData, new Observer<List<SurahDetail>>() {
             @Override
             public void onChanged(@Nullable List<SurahDetail> surahDetails) {
                 List<String> transList = dataManager.getTranslationVerses(pos);
@@ -55,6 +56,8 @@ public class SurahDetailViewModel extends ViewModel {
                     }
                 }
                 mediator.setValue(surahDetails);
+                mediator.removeSource(listLiveData);
+
             }
         });
         return mediator;
@@ -119,6 +122,11 @@ public class SurahDetailViewModel extends ViewModel {
         catch (NumberFormatException e){
             return 0;
         }
+    }
+
+    public void setBookmark(SurahDetail surah, int value) {
+        surah.setBookmark(value);
+        dataManager.setBookmark(surah,value);
     }
 
 }

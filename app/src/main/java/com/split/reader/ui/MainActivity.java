@@ -1,22 +1,30 @@
 package com.split.reader.ui;
 
 import android.app.SearchManager;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
+import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
+import androidx.annotation.Nullable;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.DividerItemDecoration;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.split.reader.MainApplication;
+import com.split.reader.adapters.ExpandableFavoritesAdapter;
 import com.split.reader.adapters.SurahsRecycleViewAdapter;
 import com.split.reader.data.TranslationDatabaseListener;
+import com.split.reader.model.Bookmark;
+import com.split.reader.model.SurahDetail;
 import com.split.reader.model.Surahs;
 import com.split.reader.model.TranslationData;
 import com.split.reader.reader.R;
@@ -27,16 +35,23 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements SurahsRecycleViewAdapter.OnSurahClickListener, TranslationDatabaseListener {
+import javax.inject.Inject;
+
+public class MainActivity extends AppCompatActivity implements
+        SurahsRecycleViewAdapter.OnSurahClickListener,
+        TranslationDatabaseListener,ExpandableFavoritesAdapter.onBookmarkClickListener {
     public static final String SURAH = "SURAH";
     public static final String SURAHS_LIST = "SURAHS_LIST";
     public static final String LAST_READ = "last_read";
-
+    public static final String BOOKMARK_POSITION = "bookmark";
     private SurahViewModel surahViewModel;
     private SurahsRecycleViewAdapter adapter;
     private MainActivityBinding binding;
+    private DrawerLayout mDrawerLayout;
     private int lastReadVerse = -1;
     private SearchView searchView;
+    @Inject
+    ExpandableFavoritesAdapter expandableFavoritesAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,12 +60,38 @@ public class MainActivity extends AppCompatActivity implements SurahsRecycleView
         MainApplication.getAppComponent().inject(this);
         surahViewModel = ViewModelProviders.of(MainActivity.this).get(SurahViewModel.class);
         adapter = new SurahsRecycleViewAdapter();
+        mDrawerLayout = binding.drawerLayout;
         binding.setLifecycleOwner(this);
         binding.rvGroup.setAdapter(adapter);
+        binding.bookmarkLv.setAdapter(expandableFavoritesAdapter);
+        DividerItemDecoration itemDecor = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        binding.rvGroup.addItemDecoration(itemDecor);
+        expandableFavoritesAdapter.setListener(this);
 
+        setSupportActionBar(binding.toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+
+        surahViewModel.getFavoritesFromDb().observe(this, new Observer<List<SurahDetail>>() {
+            @Override
+            public void onChanged(@Nullable List<SurahDetail> surahDetails) {
+                expandableFavoritesAdapter.setBookmarkList(surahViewModel.getBookmarks(surahDetails));
+            }
+        });
 
     }
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            case R.id.action_search:
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
     private ArrayList<Surahs> makeCopy(List<Surahs> surahs) {
         ArrayList<Surahs> copy = new ArrayList<Surahs>(surahs.size());
         Iterator<Surahs> iterator = surahs.iterator();
@@ -63,7 +104,6 @@ public class MainActivity extends AppCompatActivity implements SurahsRecycleView
     @Override
     protected void onResume() {
         super.onResume();
-        //surahViewModel.fetchTranslationRepo(this);
         surahViewModel.getSurahLiveData().observe(this, new Observer<List<Surahs>>() {
             @Override
             public void onChanged(@Nullable List<Surahs> surahs) {
@@ -82,31 +122,27 @@ public class MainActivity extends AppCompatActivity implements SurahsRecycleView
                     adapter.setSurahs(surahs);
                     adapter.setListener(MainActivity.this);
                 }
-
-
             }
         });
-      /*  surahViewModel.getVersesLiveData().observe(this, new Observer<List<Verses>>() {
-            @Override
-            public void onChanged(@Nullable List<Verses> verses) {
-                verses.size();
-            }
-        });*/
+
     }
 
     @Override
     public void onSurahClick(Surahs surah, boolean lastRead) {
-
-        Intent detailActivityIntent = new Intent(this, SurahDetailActivity.class);
         Bundle bundle = new Bundle();
         bundle.putInt(SURAH, surah.getSura());
+        //bundle.putInt(BOOKMARK_POSITION,surahViewModel.getLastReadVerse());
         bundle.putBoolean(LAST_READ, lastRead);
+        //todo wtf?
         ArrayList<Surahs> surahs = new ArrayList<>(surahViewModel.getSurahLiveData().getValue());
         bundle.putParcelableArrayList(SURAHS_LIST, surahs);
+        startSurahDetailActivity(bundle);
+    }
+    private void startSurahDetailActivity(Bundle bundle){
+        Intent detailActivityIntent = new Intent(this, SurahDetailActivity.class);
         detailActivityIntent.putExtras(bundle);
         startActivity(detailActivityIntent);
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
@@ -138,20 +174,7 @@ public class MainActivity extends AppCompatActivity implements SurahsRecycleView
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_search) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void onFinished(List<TranslationData> responseObject) {
@@ -161,5 +184,17 @@ public class MainActivity extends AppCompatActivity implements SurahsRecycleView
     @Override
     public void onFailed(Throwable t) {
         Log.d("yellow", "error " + t);
+    }
+
+
+    @Override
+    public void onClick(Bookmark bookmark) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(SURAH, bookmark.getSurah().getSura());
+        bundle.putInt(BOOKMARK_POSITION,bookmark.getPosition());
+        //todo wtf?
+        ArrayList<Surahs> surahs = new ArrayList<>(surahViewModel.getSurahLiveData().getValue());
+        bundle.putParcelableArrayList(SURAHS_LIST, surahs);
+        startSurahDetailActivity(bundle);
     }
 }

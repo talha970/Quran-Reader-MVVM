@@ -1,6 +1,5 @@
 package com.split.reader.data;
 
-import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 
 import com.split.reader.db.dao.TranslationDataDao;

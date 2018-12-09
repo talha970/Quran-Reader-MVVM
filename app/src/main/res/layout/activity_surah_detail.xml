@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <android.support.design.widget.CoordinatorLayout
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             >
@@ -29,19 +29,19 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <android.support.design.widget.AppBarLayout
+                <com.google.android.material.appbar.AppBarLayout
                     android:id="@+id/appBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     >
 
-                    <android.support.v7.widget.Toolbar
+                    <androidx.appcompat.widget.Toolbar
                         android:id="@+id/toolbar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/colorPrimary"
-                        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                        app:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+                        app:popupTheme="@style/ThemeOverlay.MaterialComponents.Light"
 
                         >
 
@@ -51,16 +51,24 @@
                             android:layout_height="wrap_content"
                             style="@style/Base.Widget.AppCompat.Button.Borderless"
                             android:text="@{viewModel.actionBarTitle}"
+
                             android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
                             android:onClick="@{()->activity.onToolbarClick()}"
                             android:drawableRight="@drawable/ic_drop_down"
+                            android:drawableEnd="@drawable/ic_drop_down"
+                            />
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{()->activity.onToolbarClick()}"
+                            android:src="@drawable/ic_drop_down"
                             />
 
-                    </android.support.v7.widget.Toolbar>
+                    </androidx.appcompat.widget.Toolbar>
 
-                </android.support.design.widget.AppBarLayout>
+                </com.google.android.material.appbar.AppBarLayout>
             </LinearLayout>
-        </android.support.design.widget.CoordinatorLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
         <LinearLayout
 
             android:layout_width="match_parent"
@@ -69,7 +77,7 @@
             android:orientation="vertical"
             android:weightSum="1">
 
-            <android.support.v4.view.ViewPager
+            <androidx.viewpager.widget.ViewPager
                 android:id="@+id/pager"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"

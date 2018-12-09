@@ -1,10 +1,10 @@
 package com.huma.room_for_asset
 
-import android.arch.persistence.db.SupportSQLiteDatabase
-import android.arch.persistence.room.Database
-import android.arch.persistence.room.Room
-import android.arch.persistence.room.RoomDatabase
-import android.arch.persistence.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.util.Log
@@ -49,7 +49,9 @@ class RoomAsset {
                     .addMigrations(object : Migration(1, 2) {
                         override fun migrate(database: SupportSQLiteDatabase) {
                             Log.w(TAG, "migrate from version 1 to 2 ")
-                            database.execSQL("CREATE TABLE IF NOT EXISTS `translations` (`id` INTEGER NOT NULL, `displayName` TEXT, `translator` TEXT, `languageCode` TEXT, `fileUrl` TEXT, `fileName` TEXT, `saveTo` TEXT, `downloadType` TEXT, `minimumVersion` TEXT, `currentVersion` TEXT, PRIMARY KEY(`id`))");
+                            database.execSQL("CREATE TABLE IF NOT EXISTS `translations` (`id` INTEGER NOT NULL, `displayName` TEXT, `translator` TEXT, `languageCode` TEXT, `fileUrl` TEXT, `fileName` TEXT, `saveTo` TEXT, `downloadType` TEXT, `minimumVersion` TEXT, `currentVersion` TEXT, PRIMARY KEY(`id`))")
+                            database.execSQL("ALTER TABLE `quran_simple_translation` ADD bookmark INTEGER ")
+
                         }
                     })
         }

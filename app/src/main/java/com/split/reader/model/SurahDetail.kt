@@ -1,9 +1,9 @@
 package com.split.reader.model
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.Ignore
-import android.arch.persistence.room.PrimaryKey
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 
 
 @Entity(tableName = "quran_simple_translation")
@@ -15,6 +15,7 @@ data class SurahDetail (
         @ColumnInfo(name = "text") var text: String?="",
         @ColumnInfo(name = "translation") var translation: String?="",
         @ColumnInfo(name = "md5") var md5: String? = "",
+        @ColumnInfo(name = "bookmark") var bookmark: Int? = 0,
         @Ignore
         @ColumnInfo(name = "trans") var trans: String?=""
 

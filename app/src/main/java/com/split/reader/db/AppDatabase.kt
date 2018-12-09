@@ -1,10 +1,12 @@
 package com.split.reader.db
 
-import android.arch.persistence.room.Database
-import android.arch.persistence.room.RoomDatabase
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import com.split.reader.db.dao.BookmarkDao
 import com.split.reader.db.dao.SurahDao
 import com.split.reader.db.dao.SurahDetailDao
 import com.split.reader.db.dao.TranslationDataDao
+import com.split.reader.model.Bookmark
 import com.split.reader.model.SurahDetail
 import com.split.reader.model.Surahs
 import com.split.reader.model.TranslationData
@@ -16,5 +18,5 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun SurahDao(): SurahDao
     abstract fun SurahDetailDao(): SurahDetailDao
     abstract fun TranslationDataDao(): TranslationDataDao
-
+   // abstract fun BookmarkDao(): BookmarkDao
 }

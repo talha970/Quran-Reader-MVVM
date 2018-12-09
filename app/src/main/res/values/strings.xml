@@ -2,4 +2,6 @@
     <string name="app_name">Quran Reader</string>
     <string name="action_search">Search Surahs</string>
     <string name="search_hint">Search Surah</string>
+    <string name="menu_favorites">Favorites</string>
+    <string name="last_read_position">Last read position</string>
 </resources>

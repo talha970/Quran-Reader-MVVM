@@ -1,6 +1,7 @@
 <layout xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -22,23 +23,26 @@
 
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
+
+
         >
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/cv"
+            android:background="@android:color/holo_green_dark"
             android:onClick="@{() -> listener.onSurahClick(surah,lastRead)}"
             >
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
+
                 >
 
 
@@ -46,8 +50,7 @@
                     android:id="@+id/surah_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
-
+                    android:textStyle="bold"
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:fontFamily="sans-serif-light"
@@ -60,12 +63,10 @@
                     android:id="@+id/last_read"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
-
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="8dp"
-                    android:text="Last read position"
+                    android:text="@string/last_read_position"
                     android:visibility="@{lastRead? View.VISIBLE : View.GONE}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -81,6 +82,20 @@
                     android:textSize="20sp"
                     android:visibility="@{lastRead? View.GONE : View.VISIBLE}"
                     app:layout_constraintStart_toStartOf="parent" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/surah_type"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="sans-serif-light"
+                    android:text="@{String.valueOf(surah.getType())}"
+                    android:visibility="@{lastRead? View.GONE : View.VISIBLE}"
+                    app:layout_constraintStart_toStartOf="@+id/surah_name"
+                    app:layout_constraintTop_toBottomOf="@+id/surah_name" />
 
 
                 <ImageView
@@ -102,9 +117,9 @@
                     app:setActivity="@{listener}"
                     app:setSurahImg="@{surah}" />
 
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

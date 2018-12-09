@@ -1,7 +1,7 @@
 package com.split.reader.model;
 
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.TypeConverters;
+import androidx.room.Entity;
+import androidx.room.TypeConverters;
 
 import com.google.gson.annotations.SerializedName;
 import com.split.reader.data.ResponseConverters;

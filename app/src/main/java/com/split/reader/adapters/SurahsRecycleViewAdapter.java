@@ -1,10 +1,10 @@
 package com.split.reader.adapters;
 
 
-import android.databinding.DataBindingUtil;
-import android.support.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.annotation.NonNull;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;

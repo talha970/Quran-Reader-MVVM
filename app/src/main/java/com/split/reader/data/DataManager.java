@@ -1,17 +1,16 @@
 package com.split.reader.data;
 
-import android.arch.lifecycle.LiveData;
+import androidx.lifecycle.LiveData;
 import android.content.Context;
-import android.util.Log;
 
 import com.split.reader.db.AppDatabase;
+import com.split.reader.db.dao.BookmarkDao;
 import com.split.reader.db.sqlite.DatabaseAccess;
 import com.split.reader.model.SurahDetail;
 import com.split.reader.model.Surahs;
 import com.split.reader.model.TranslationData;
 import com.split.reader.prefs.PreferencesHelper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -22,6 +21,7 @@ public class DataManager {
     private PreferencesHelper preferencesHelper;
     private Context context;
     private TranslationRepo translationRepo;
+    private BookmarkDao bookmarkDao;
 
     @Inject
     public DataManager(AppDatabase appDatabase, PreferencesHelper preferencesHelper
@@ -71,4 +71,35 @@ public class DataManager {
     public List<TranslationData> fetchTranslationSync() {
         return translationRepo.fetchTranslationDataSynchronous();
     }
-}
+
+    public void setBookmark(SurahDetail surah, int value) {
+        appDatabase.SurahDetailDao().setBookmark(value,surah.getId());
+    }
+
+    public LiveData<List<SurahDetail>> getFavorites(){
+       return appDatabase.SurahDetailDao().getFavorites();
+    }
+
+    public Surahs getSurah(Integer suraNo) {
+        return appDatabase.SurahDao().getSurah(suraNo);
+    }
+
+   /* public void setBookmark(final SurahDetail surah) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Bookmark bookmark = new Bookmark(surah.getSuraNo(),surah.getAyaNo());
+                appDatabase.BookmarkDao().insertBookmark(bookmark);
+
+            }
+        }) .start();
+        }
+
+    public LiveData<List<Bookmark>> getBookmarks() {
+
+                return appDatabase.BookmarkDao().getBookmarks();
+
+    }*/
+
+    }
+

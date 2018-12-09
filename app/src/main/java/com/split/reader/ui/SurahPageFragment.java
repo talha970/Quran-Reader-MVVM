@@ -1,15 +1,17 @@
 package com.split.reader.ui;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
-import android.databinding.DataBindingUtil;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.databinding.DataBindingUtil;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
-import android.support.v7.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +27,8 @@ import com.split.reader.reader.databinding.FragmentSurahPageBinding;
 import com.split.reader.viewmodels.SurahDetailViewModel;
 
 import java.util.List;
+
+import static android.widget.LinearLayout.HORIZONTAL;
 
 
 public class SurahPageFragment extends Fragment implements SurahDetailRecycleViewAdapter.OnSurahDetailClickListener {
@@ -62,7 +66,8 @@ public class SurahPageFragment extends Fragment implements SurahDetailRecycleVie
         viewModel = ViewModelProviders.of(getActivity()).get(SurahDetailViewModel.class);
         int pos = getArguments().getInt(PAGER_FRAG_POSITION);
         Log.d("mine", "pagerfragpos " + String.valueOf(viewModel.currentPos.getValue()) + "bundle value =" + pos);
-        viewModel.getSurahDetailLiveData(pos + 1).observe(this, new Observer<List<SurahDetail>>() {
+        final LiveData<List<SurahDetail>> liveData = viewModel.getSurahDetailLiveData(pos + 1);
+       liveData.observe(this, new Observer<List<SurahDetail>>() {
             @Override
             public void onChanged(@Nullable List<SurahDetail> surahDetails) {
                 adapter.setSurahs(surahDetails);
@@ -70,7 +75,7 @@ public class SurahPageFragment extends Fragment implements SurahDetailRecycleVie
                 if (getUserVisibleHint()) {
                     int scroll = viewModel.rvScrollPosition.getValue();
                     binding.rvSurahDetails.getLayoutManager().scrollToPosition(scroll);
-
+                    liveData.removeObserver(this);
                 }
             }
         });
@@ -97,6 +102,8 @@ public class SurahPageFragment extends Fragment implements SurahDetailRecycleVie
                 R.layout.fragment_surah_page, container, false);
         binding.setLifecycleOwner(this);
         adapter = new SurahDetailRecycleViewAdapter();
+        DividerItemDecoration itemDecor = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
+        binding.rvSurahDetails.addItemDecoration(itemDecor);
         binding.setFragment(SurahPageFragment.this);
         binding.setViewModel(viewModel);
         binding.rvSurahDetails.setAdapter(adapter);
@@ -118,7 +125,10 @@ public class SurahPageFragment extends Fragment implements SurahDetailRecycleVie
     }
 
     @Override
-    public void onSurahDetailClick(SurahDetail surah) {
+    public void onSurahDetailClick(SurahDetail surah, boolean isChecked) {
         //TODO: verse share
+
+        viewModel.setBookmark(surah, isChecked ? 1:0);
+
     }
 }

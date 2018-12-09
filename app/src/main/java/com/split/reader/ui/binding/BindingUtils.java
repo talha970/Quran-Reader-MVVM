@@ -1,20 +1,20 @@
 package com.split.reader.ui.binding;
 
-import android.databinding.BindingAdapter;
-import android.databinding.adapters.Converters;
-import android.support.annotation.IdRes;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.View;
+import androidx.databinding.BindingAdapter;
+import androidx.databinding.adapters.Converters;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.widget.AppCompatCheckBox;
+
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 
 import com.split.reader.adapters.SurahDetailPagerAdapter;
+import com.split.reader.adapters.SurahDetailRecycleViewAdapter;
 import com.split.reader.adapters.SurahsRecycleViewAdapter;
+import com.split.reader.model.SurahDetail;
 import com.split.reader.model.Surahs;
 import com.split.reader.ui.MainActivity;
 import com.split.reader.ui.SurahDetailActivity;
-import com.split.reader.ui.SurahPageFragment;
 
 public class BindingUtils extends Converters {
 
@@ -25,10 +25,27 @@ public class BindingUtils extends Converters {
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(position-1);
         viewPager.addOnPageChangeListener(activity);
+        // have to do it here since adapter would be null in onCreate()
         activity.onPageSelected(position-1);
     }
 
 
+
+    @BindingAdapter(value = {"app:onCheckedChanged", "app:setSuraDetails"})
+    public static void suraDetailsChecked(AppCompatCheckBox appCompatCheckBox,
+                                         final SurahDetailRecycleViewAdapter.OnSurahDetailClickListener listener,
+                                         final SurahDetail surahDetail) {
+
+        appCompatCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(buttonView.isPressed())
+                {
+                    listener.onSurahDetailClick(surahDetail,isChecked);
+                }
+            }
+        });
+    }
 
     @BindingAdapter({"app:setSurahImg","app:setActivity"})
     public static void inertiaViewPagerAdapter(ImageView imageView, Surahs surahs,SurahsRecycleViewAdapter.OnSurahClickListener listener) {
@@ -39,13 +56,5 @@ public class BindingUtils extends Converters {
        imageView.setImageResource(resId);
     }
 
-/*    @BindingAdapter({"app:navigationOnClick"})
-    public static void toolbarOnBackPressed(Toolbar toolbar, final SurahPageFragment fragment) {
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fragment.getActivity().onBackPressed();
-            }
-        });
-    }*/
+
 }

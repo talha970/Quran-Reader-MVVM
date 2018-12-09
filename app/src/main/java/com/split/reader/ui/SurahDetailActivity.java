@@ -1,16 +1,16 @@
 package com.split.reader.ui;
 
 
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.content.DialogInterface;
-import android.databinding.DataBindingUtil;
+import androidx.databinding.DataBindingUtil;
 
-import android.support.v4.app.NavUtils;
-import android.support.v4.view.ViewPager;
+import androidx.core.app.NavUtils;
+import androidx.viewpager.widget.ViewPager;
 
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -33,6 +33,7 @@ public class SurahDetailActivity extends AppCompatActivity implements ViewPager.
     SurahDetailViewModel viewModel;
     int surah;
     boolean isLastRead;
+    int bookmark;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +46,7 @@ public class SurahDetailActivity extends AppCompatActivity implements ViewPager.
 
         final Bundle b = getIntent().getExtras();
         surah = b.getInt(MainActivity.SURAH);
+        bookmark = b.getInt(MainActivity.BOOKMARK_POSITION,0);
         isLastRead = b.getBoolean(MainActivity.LAST_READ,false);
         List<Surahs> surahs = b.getParcelableArrayList(MainActivity.SURAHS_LIST);
         viewModel.setSurahs(surahs);
@@ -52,9 +54,6 @@ public class SurahDetailActivity extends AppCompatActivity implements ViewPager.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         binding.setPosition(surah);
-
-
-
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -104,6 +103,8 @@ public class SurahDetailActivity extends AppCompatActivity implements ViewPager.
         dialog.show();
     }
 
+  /*  takes in position of the surah
+    in the quran*/
     @Override
     public void onPageSelected(int position) {
         viewModel.updateBottomBar(position, binding.pager.getAdapter().getCount() - 1);
@@ -111,7 +112,7 @@ public class SurahDetailActivity extends AppCompatActivity implements ViewPager.
             viewModel.updateActionbar(position+1);
 
         }
-        else{ //last read location
+        else{ //last bookmark location
             viewModel.updateActionbar(position);
         }
         if(isLastRead){
@@ -121,7 +122,8 @@ public class SurahDetailActivity extends AppCompatActivity implements ViewPager.
 
         }
         else {
-            viewModel.rvScrollPosition.setValue(0);
+            //if bookmark not selected it will move to position 0 since thats the default bundle value
+            viewModel.rvScrollPosition.setValue(bookmark -1);
             Log.e("mine","else "+isLastRead);
 
         }
